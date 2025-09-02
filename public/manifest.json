@@ -1,0 +1,84 @@
+{
+  "name": "🎨 Screen Print Pro - Production Manager",
+  "short_name": "PrintPro",
+  "description": "Professional screen printing production management system with kanban workflow, job tracking, and quality control",
+  "start_url": "/kanban",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
+  "orientation": "any",
+  "lang": "en",
+  "scope": "/",
+  "categories": ["productivity", "business", "utilities"],
+  "icons": [
+    {
+      "src": "/icon-192x192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-256x256.svg",
+      "sizes": "256x256",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-384x384.svg",
+      "sizes": "384x384",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512x512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "📋 Kanban Board",
+      "short_name": "Kanban",
+      "description": "View production kanban board with drag & drop",
+      "url": "/kanban",
+      "icons": [{ "src": "/icon-192x192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "➕ Create Job",
+      "short_name": "New Job",
+      "description": "Create a new print job with specifications",
+      "url": "/kanban?create=true",
+      "icons": [{ "src": "/icon-192x192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "📊 Reports",
+      "short_name": "Reports",
+      "description": "View production reports and KPIs",
+      "url": "/reports",
+      "icons": [{ "src": "/icon-192x192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "📱 Scan Barcode",
+      "short_name": "Scan",
+      "description": "Scan job barcodes to update status",
+      "url": "/scan",
+      "icons": [{ "src": "/icon-192x192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    }
+  ],
+  "prefer_related_applications": false,
+  "protocol_handlers": [],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"]
+}

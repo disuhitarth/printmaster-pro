@@ -1,0 +1,436 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// SQLite doesn't support enums, using strings with check constraints
+
+model User {
+  id             String     @id @default(cuid())
+  email          String     @unique
+  emailVerified  DateTime?
+  name           String
+  image          String?
+  hashedPassword String?
+  role           String     @default("VIEWER")
+  isActive       Boolean    @default(true)
+  lastLoginAt    DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  
+  // Relations
+  jobs           Job[]      @relation("CSRJobs")
+  activities     Activity[]
+  accounts       Account[]
+  sessions       Session[]
+  inventoryTransactions InventoryTransaction[]
+  inventoryUsage InventoryUsage[]
+  purchaseOrders PurchaseOrder[]
+  
+  @@map("users")
+}
+
+// NextAuth.js required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Client {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  phone         String?
+  address       String?
+  contactPerson String?
+  notes         String?
+  status        String   @default("active")
+  jobs          Job[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Job {
+  id             String      @id @default(cuid())
+  jobCode        String      @unique
+  oeNumber       String
+  clientId       String
+  client         Client      @relation(fields: [clientId], references: [id])
+  csrId          String
+  csr            User        @relation("CSRJobs", fields: [csrId], references: [id])
+  shipDate       DateTime
+  rush24hr       Boolean     @default(false)
+  prePro         Boolean     @default(false)
+  needPhoto      Boolean     @default(false)
+  notes          String?
+  courier        String?
+  status         String      @default("NEW")
+  qtyTotal       Int
+  productId      String
+  
+  // Production checklist fields
+  vellum         Boolean     @default(false)
+  screen         Boolean     @default(false)
+  product        Boolean     @default(false)
+  checklistNotes String?
+  checklistInitial String?
+  
+  // Quality checklist fields
+  style          Boolean     @default(false)
+  colour         Boolean     @default(false)
+  oneSide        Boolean     @default(false)
+  twoSide        Boolean     @default(false)
+  pantoneMatch   Boolean     @default(false)
+  printQuality   Boolean     @default(false)
+  printLocation  Boolean     @default(false)
+  csrInitial     String?
+  printerInitial String?
+  approvalInitial String?
+  qcInitial      String?
+  
+  locations      LocationSpec[]
+  proofs         Proof[]
+  screens        ScreenSpec[]
+  inks           InkSpec[]
+  sizeBreakdown  String      // JSON string of size/quantity breakdown
+  qcRecords      QCRecord[]
+  shipments      Shipment[]
+  activities     Activity[]
+  pressSetup     PressSetup?
+  inventoryUsage InventoryUsage[]
+  
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  
+  @@index([status])
+  @@index([shipDate])
+  @@index([clientId])
+}
+
+model LocationSpec {
+  id            String   @id @default(cuid())
+  jobId         String
+  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  name          String   // Front, Back, Sleeve, Tag
+  widthIn       Float
+  heightIn      Float
+  colors        Int
+  pms           String   // JSON string of PMS color codes
+  underbase     Boolean  @default(false)
+  halftoneLpi   Int?
+  halftoneAngles String?   // JSON string of angles
+  printOrder    Int
+  placementNote String?  // e.g., "2 inches below collar"
+}
+
+model Proof {
+  id            String      @id @default(cuid())
+  jobId         String
+  job           Job         @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  version       Int
+  status        String      @default("PENDING")
+  sentAt        DateTime?
+  approvedAt    DateTime?
+  approvedBy    String?
+  approverEmail String?
+  ipAddress     String?
+  notes         String?
+  fileUrl       String
+  imageUrl      String?     // Preview/thumbnail
+  createdAt     DateTime    @default(now())
+  
+  @@unique([jobId, version])
+}
+
+model ScreenSpec {
+  id            String   @id @default(cuid())
+  jobId         String
+  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  screenId      String
+  mesh          Int
+  tensionN      Float?
+  emulsion      String?
+  exposureSec   Int?
+  reclaimStatus String?
+}
+
+model InkSpec {
+  id          String   @id @default(cuid())
+  jobId       String
+  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  name        String
+  pms         String?
+  type        String   // plastisol, water-based, discharge
+  flashTempF  Int?
+  cureTempF   Int?
+  additives   String?
+}
+
+model PressSetup {
+  id                String   @id @default(cuid())
+  jobId             String   @unique
+  job               Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  pressId           String
+  platen            String?
+  squeegeeDurometer Int?
+  strokes           Int?
+  offContact        Float?
+  flashTimeMs       Int?
+  testPrintPass     Boolean  @default(false)
+  createdAt         DateTime @default(now())
+}
+
+model QCRecord {
+  id         String   @id @default(cuid())
+  jobId      String
+  job        Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  exitTempF  Int?
+  passed     Boolean
+  defects    Int      @default(0)
+  reasons    String?  // JSON string of defect reasons
+  photoUrl   String?
+  createdAt  DateTime @default(now())
+}
+
+model Shipment {
+  id        String   @id @default(cuid())
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  courier   String
+  tracking  String?
+  labels    String?  // JSON string of label URLs
+  createdAt DateTime @default(now())
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  meta      String?  // JSON string
+  createdAt DateTime @default(now())
+  
+  @@index([jobId])
+  @@index([userId])
+}
+
+// Inventory Management System
+
+model InventoryCategory {
+  id          String          @id @default(cuid())
+  name        String          @unique
+  description String?
+  color       String?         // Hex color for UI
+  icon        String?         // Icon name for UI
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  
+  items       InventoryItem[]
+}
+
+model InventoryItem {
+  id             String            @id @default(cuid())
+  sku            String            @unique
+  name           String
+  description    String?
+  categoryId     String
+  category       InventoryCategory @relation(fields: [categoryId], references: [id])
+  
+  // Stock tracking
+  currentStock   Int               @default(0)
+  minStock       Int               @default(0)
+  maxStock       Int?
+  reorderPoint   Int               @default(0)
+  
+  // Pricing
+  unitCost       Float             @default(0)
+  unitPrice      Float?            // Selling price if applicable
+  
+  // Physical properties
+  unit           String            // pcs, kg, liters, yards, etc.
+  size           String?
+  color          String?
+  brand          String?
+  supplier       String?
+  
+  // Tracking
+  location       String?           // Shelf, bin, or area location
+  barcode        String?           @unique
+  status         String            @default("active") // active, discontinued, backordered
+  
+  // Metadata
+  tags           String?           // JSON string of tags
+  notes          String?
+  image          String?           // URL to product image
+  
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  
+  // Relations
+  transactions   InventoryTransaction[]
+  usageRecords   InventoryUsage[]
+  purchaseOrderItems PurchaseOrderItem[]
+  
+  @@index([categoryId])
+  @@index([status])
+  @@index([currentStock])
+  @@index([sku])
+}
+
+model InventoryTransaction {
+  id            String        @id @default(cuid())
+  itemId        String
+  item          InventoryItem @relation(fields: [itemId], references: [id])
+  
+  type          String        // IN, OUT, ADJUSTMENT, TRANSFER
+  quantity      Int
+  unitCost      Float?        // Cost per unit for this transaction
+  
+  // Transaction details
+  reference     String?       // PO number, job code, etc.
+  reason        String?       // Purchase, sale, waste, damage, etc.
+  notes         String?
+  
+  // Who and when
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  createdAt     DateTime      @default(now())
+  
+  // For transfers
+  fromLocation  String?
+  toLocation    String?
+  
+  @@index([itemId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model InventoryUsage {
+  id          String        @id @default(cuid())
+  itemId      String
+  item        InventoryItem @relation(fields: [itemId], references: [id])
+  jobId       String?
+  job         Job?          @relation(fields: [jobId], references: [id])
+  
+  quantity    Int
+  unitCost    Float?        // Cost at time of usage
+  notes       String?
+  
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  createdAt   DateTime      @default(now())
+  
+  @@index([itemId])
+  @@index([jobId])
+  @@index([createdAt])
+}
+
+model Supplier {
+  id            String   @id @default(cuid())
+  name          String
+  contactPerson String?
+  email         String?
+  phone         String?
+  address       String?
+  website       String?
+  notes         String?
+  status        String   @default("active")
+  
+  // Payment terms
+  paymentTerms  String?  // Net 30, COD, etc.
+  discountTerms String?  // Early payment discounts
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([status])
+}
+
+model PurchaseOrder {
+  id            String               @id @default(cuid())
+  poNumber      String               @unique
+  supplierId    String?
+  
+  status        String               @default("DRAFT") // DRAFT, SENT, CONFIRMED, RECEIVED, CANCELLED
+  orderDate     DateTime             @default(now())
+  expectedDate  DateTime?
+  receivedDate  DateTime?
+  
+  subtotal      Float                @default(0)
+  tax           Float                @default(0)
+  shipping      Float                @default(0)
+  total         Float                @default(0)
+  
+  notes         String?
+  
+  createdBy     String
+  createdUser   User                 @relation(fields: [createdBy], references: [id])
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  
+  items         PurchaseOrderItem[]
+  
+  @@index([status])
+  @@index([orderDate])
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(cuid())
+  poId            String
+  purchaseOrder   PurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+  itemId          String?
+  inventoryItem   InventoryItem? @relation(fields: [itemId], references: [id])
+  
+  description     String        // In case item doesn't exist in inventory yet
+  quantity        Int
+  unitCost        Float
+  totalCost       Float         // quantity * unitCost
+  
+  quantityReceived Int          @default(0)
+  notes           String?
+  
+  @@index([poId])
+}

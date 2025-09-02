@@ -1,0 +1,66 @@
+const fs = require('fs');
+const path = require('path');
+
+// Create SVG content for different sizes
+const createSVG = (size) => `
+<svg width="${size}" height="${size}" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="96" cy="96" r="88" fill="url(#bg)" />
+  
+  <!-- Screen/Press Icon -->
+  <g transform="translate(48, 48)">
+    <!-- Press Base -->
+    <rect x="8" y="72" width="80" height="16" rx="4" fill="white" fill-opacity="0.9" />
+    
+    <!-- Screen Frame -->
+    <rect x="16" y="32" width="64" height="48" rx="4" fill="none" stroke="white" stroke-width="3" stroke-opacity="0.9" />
+    
+    <!-- Mesh Pattern -->
+    <g opacity="0.7">
+      <line x1="24" y1="40" x2="72" y2="40" stroke="white" stroke-width="1" />
+      <line x1="24" y1="48" x2="72" y2="48" stroke="white" stroke-width="1" />
+      <line x1="24" y1="56" x2="72" y2="56" stroke="white" stroke-width="1" />
+      <line x1="24" y1="64" x2="72" y2="64" stroke="white" stroke-width="1" />
+      <line x1="24" y1="72" x2="72" y2="72" stroke="white" stroke-width="1" />
+      
+      <line x1="32" y1="36" x2="32" y2="76" stroke="white" stroke-width="1" />
+      <line x1="40" y1="36" x2="40" y2="76" stroke="white" stroke-width="1" />
+      <line x1="48" y1="36" x2="48" y2="76" stroke="white" stroke-width="1" />
+      <line x1="56" y1="36" x2="56" y2="76" stroke="white" stroke-width="1" />
+      <line x1="64" y1="36" x2="64" y2="76" stroke="white" stroke-width="1" />
+    </g>
+    
+    <!-- Squeegee -->
+    <rect x="20" y="20" width="56" height="4" rx="2" fill="white" fill-opacity="0.9" />
+    
+    <!-- Print Design (T-shirt outline) -->
+    <g transform="translate(32, 44)" fill="white" fill-opacity="0.8">
+      <path d="M8 4 C8 2, 10 0, 12 0 L20 0 C22 0, 24 2, 24 4 L24 8 L28 12 L28 24 C28 26, 26 28, 24 28 L8 28 C6 28, 4 26, 4 24 L4 12 L8 8 Z" />
+    </g>
+  </g>
+</svg>`;
+
+// Create SVG files for different icon sizes
+const sizes = [192, 256, 384, 512];
+sizes.forEach(size => {
+  const svgContent = createSVG(size);
+  const fileName = `icon-${size}x${size}.svg`;
+  const filePath = path.join(__dirname, '..', 'public', fileName);
+  
+  fs.writeFileSync(filePath, svgContent);
+  console.log(`Created ${fileName}`);
+});
+
+// Create favicon
+const faviconSVG = createSVG(32);
+fs.writeFileSync(path.join(__dirname, '..', 'public', 'favicon.svg'), faviconSVG);
+console.log('Created favicon.svg');
+
+console.log('All PWA icons generated successfully!');

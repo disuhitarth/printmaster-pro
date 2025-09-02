@@ -399,7 +399,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 **Hitarth Disu** - Full Stack Developer
 
 - 🌐 Portfolio: [hitarthdisu.dev](#)
-- 💼 LinkedIn: [linkedin.com/in/hitarth-disu](#)
+- 💼 LinkedIn: [[linkedin.com/in/hitarth-disu](https://www.linkedin.com/in/hitarth-mehta/)](#)
 - 📧 Email: disuhitarth@gmail.com
 - 🐦 Twitter: [@disuhitarth](#)
 

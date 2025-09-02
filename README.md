@@ -43,7 +43,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/printmaster-pro.git
+git clone https://github.com/bolo/printmaster-pro.git
 cd printmaster-pro
 
 # Install dependencies
@@ -280,7 +280,7 @@ erDiagram
 
 ### Vercel (Recommended)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/printmaster-pro)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/bolo/printmaster-pro)
 
 1. **One-click deploy** using the button above
 2. **Configure environment variables** in Vercel dashboard

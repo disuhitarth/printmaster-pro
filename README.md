@@ -8,9 +8,15 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.3.6-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
+![GitHub stars](https://img.shields.io/github/stars/disuhitarth/printmaster-pro?style=social)
+![GitHub forks](https://img.shields.io/github/forks/disuhitarth/printmaster-pro?style=social)
+![GitHub issues](https://img.shields.io/github/issues/disuhitarth/printmaster-pro)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/disuhitarth/printmaster-pro)
+![GitHub last commit](https://img.shields.io/github/last-commit/disuhitarth/printmaster-pro)
+
 *Transform your screen printing workflow with enterprise-grade PWA technology*
 
-[🚀 Live Demo](#) | [📖 Documentation](#documentation) | [🐛 Report Bug](../../issues) | [💡 Request Feature](../../issues)
+[🚀 Live Demo](https://printmaster-pro.vercel.app) | [📖 Documentation](https://github.com/disuhitarth/printmaster-pro#readme) | [🐛 Report Bug](https://github.com/disuhitarth/printmaster-pro/issues) | [💡 Request Feature](https://github.com/disuhitarth/printmaster-pro/issues)
 
 </div>
 
@@ -43,7 +49,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/bolo/printmaster-pro.git
+git clone https://github.com/disuhitarth/printmaster-pro.git
 cd printmaster-pro
 
 # Install dependencies
@@ -280,7 +286,7 @@ erDiagram
 
 ### Vercel (Recommended)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/bolo/printmaster-pro)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/disuhitarth/printmaster-pro)
 
 1. **One-click deploy** using the button above
 2. **Configure environment variables** in Vercel dashboard
@@ -390,12 +396,12 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 👨‍💻 Developer
 
-**[Your Name]** - Full Stack Developer
+**Hitarth Disu** - Full Stack Developer
 
-- 🌐 Portfolio: [yourportfolio.com](#)
-- 💼 LinkedIn: [linkedin.com/in/yourprofile](#)
-- 📧 Email: your.email@example.com
-- 🐦 Twitter: [@yourhandle](#)
+- 🌐 Portfolio: [hitarthdisu.dev](#)
+- 💼 LinkedIn: [linkedin.com/in/hitarth-disu](#)
+- 📧 Email: disuhitarth@gmail.com
+- 🐦 Twitter: [@disuhitarth](#)
 
 ---
 

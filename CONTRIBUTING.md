@@ -27,7 +27,7 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/bolo/printmaster-pro.git
+   git clone https://github.com/disuhitarth/printmaster-pro.git
    cd printmaster-pro
    ```
 
@@ -83,7 +83,7 @@ Example: `feat: add inventory export functionality`
 
 ## Bug Reports
 
-We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/bolo/printmaster-pro/issues).
+We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/disuhitarth/printmaster-pro/issues).
 
 **Great Bug Reports** tend to have:
 
